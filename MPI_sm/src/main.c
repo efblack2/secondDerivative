@@ -29,17 +29,10 @@ int main(int argc, char *argv[])
     MPI_Comm sm_comm;
     MPI_Comm_split_type(MPI_COMM_WORLD,MPI_COMM_TYPE_SHARED, 0,MPI_INFO_NULL, &sm_comm);
 
-    int myWorldRank, worldSize;
-    
-    MPI_Comm_rank(MPI_COMM_WORLD,&myWorldRank);
-    MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
-
     int mySharedRank,sharedSize;
     MPI_Comm_rank(sm_comm,&mySharedRank);
     MPI_Comm_size(sm_comm,&sharedSize);
-    //int nNodes=CEILING(worldSize,sharedSize);
     
-    //int nthreads;
     double elapsed_time;
     int max_iterations;                                  // number of iterations
 
@@ -48,7 +41,7 @@ int main(int argc, char *argv[])
     } // end if //
     
     if ( (argc <= 1 || max_iterations < 0 ) ) {  // using rank 0 because of scanf()
-        if (myWorldRank == 0) {                              // using rank 0 because of scanf()
+        if (mySharedRank == 0) {                              // using rank 0 because of scanf()
             printf("Maximum iterations [100-4000]?: ");fflush(stdout);
             while ( !scanf("%d", &max_iterations)  || max_iterations < 0 ) {
                 printf("wrong input value. Try again... ");fflush(stdout);
@@ -57,7 +50,7 @@ int main(int argc, char *argv[])
         MPI_Bcast(&max_iterations, 1, MPI_INT, 0,MPI_COMM_WORLD);    
     } // endif //
 
-    if (myWorldRank == root) {
+    if (mySharedRank == root) {
         printf("Running %d iterations \n",max_iterations);fflush(stdout);
         if (sizeof(real) == 8) {
             printf("Double precision version\n");
@@ -79,17 +72,17 @@ int main(int argc, char *argv[])
     MPI_Win sm_win_t1;
     MPI_Win sm_win_t2;
     
-    t1 = dimCube(LEV2,ROW2,COL2, &sm_win_t1, myWorldRank,&sm_comm);
-    t2 = dimCube(LEV2,ROW2,COL2, &sm_win_t2, myWorldRank,&sm_comm);
+    t1 = dimCube(LEV2,ROW2,COL2, &sm_win_t1, mySharedRank,&sm_comm);
+    t2 = dimCube(LEV2,ROW2,COL2, &sm_win_t2, mySharedRank,&sm_comm);
 
     MPI_Win_lock_all(0,sm_win_t1);
     MPI_Win_lock_all(0,sm_win_t2);
 
 
-    const int start = BLOCK_LOW (myWorldRank,sharedSize,(zdim-1))+1;
-    const int end   = BLOCK_HIGH(myWorldRank,sharedSize,(zdim-1))+2;
+    const int start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
+    const int end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
     
-    if (myWorldRank == root) {
+    if (mySharedRank == root) {
         setFun(t1, xdim, ydim, zdim);
     } // end if
 
@@ -113,7 +106,7 @@ int main(int argc, char *argv[])
     MPI_Barrier(sm_comm);
     elapsed_time += MPI_Wtime();
     
-    if (myWorldRank == root) {
+    if (mySharedRank == root) {
         printf ("\n\nIt tooks %14.6e seconds for %d processes to finish\n", elapsed_time, sharedSize);
         if (sizeof(real) == 8) {
             printf("Double precision version\n");
