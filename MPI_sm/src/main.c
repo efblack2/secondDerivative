@@ -99,10 +99,9 @@ int main(int argc, char *argv[])
     elapsed_time = -MPI_Wtime();
     
 
-    for (int n=1 ; n<=max_iterations; n++) {
+    for (int n=1 ; n<=max_iterations; ++n) {
         secDev(t2,t1, xdim, ydim, start,end);
-        //  . . . Set boundary conditions for T                     //
-        MPI_Win_sync(sm_win_t1);
+        //MPI_Win_sync(sm_win_t1);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
     }	// end of time loop n = 1,...,nstep //

@@ -37,7 +37,7 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int st
             } // end for //
         } // end for //
     } // end for //
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
 } // end of secDev() //
 
