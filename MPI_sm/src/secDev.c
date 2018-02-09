@@ -21,8 +21,8 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int st
 
     // derivative in y
     for(int l = start; l < end; ++l) {
-        for(int r = 1; r < ydim ; ++r) {
-            for(int c = 1; c < xdim; ++c) {
+        for(int c = 1; c < xdim; ++c) {
+            for(int r = 1; r < ydim ; ++r) {
                 dev[l][r][c] =  0.25*(fun[l][r+1][c] + fun[l][r-1][c] - 2.0* fun[l][r][c]);
             } // end for //
         } // end for //
@@ -30,9 +30,9 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int st
     MPI_Barrier(MPI_COMM_WORLD);
 
     // derivative in z
-    for(int l = start; l < end; ++l) {
-        for(int r = 1; r < ydim ; ++r) {
-            for(int c = 1; c < xdim; ++c) {
+    for(int r = 1; r < ydim ; ++r) {
+        for(int c = 1; c < xdim; ++c) {
+            for(int l = start; l < end; ++l) {
                 dev[l][r][c] =  0.25*(fun[l+1][r][c] + fun[l-1][r][c] - 2.0* fun[l][r][c]);
             } // end for //
         } // end for //

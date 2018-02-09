@@ -34,21 +34,12 @@ int main(int argc, char *argv[])
     MPI_Comm_size(sm_comm,&sharedSize);
     
     double elapsed_time;
-    int max_iterations;                                  // number of iterations
+    int max_iterations=1;                                  // number of iterations
 
     if (argc > 1 ) {
         max_iterations=atoi(argv[1]);
+        //MPI_Bcast(&max_iterations, 1, MPI_INT, 0,MPI_COMM_WORLD);
     } // end if //
-    
-    if ( (argc <= 1 || max_iterations < 0 ) ) {  // using rank 0 because of scanf()
-        if (mySharedRank == 0) {                              // using rank 0 because of scanf()
-            printf("Maximum iterations [100-4000]?: ");fflush(stdout);
-            while ( !scanf("%d", &max_iterations)  || max_iterations < 0 ) {
-                printf("wrong input value. Try again... ");fflush(stdout);
-            } // end while //
-        } // end if //
-        MPI_Bcast(&max_iterations, 1, MPI_INT, 0,MPI_COMM_WORLD);    
-    } // endif //
 
     if (mySharedRank == root) {
         printf("Running %d iterations \n",max_iterations);fflush(stdout);
@@ -107,7 +98,7 @@ int main(int argc, char *argv[])
     elapsed_time += MPI_Wtime();
     
     if (mySharedRank == root) {
-        printf ("\n\nIt tooks %14.6e seconds for %d processes to finish\n", elapsed_time, sharedSize);
+        printf ("\n\nIt tooks %14.6e seconds for %d processes to finish\n", elapsed_time/max_iterations, sharedSize);
         if (sizeof(real) == 8) {
             printf("Double precision version\n");
         } else {

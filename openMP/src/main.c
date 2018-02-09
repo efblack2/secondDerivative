@@ -27,17 +27,12 @@ int main(int argc, char *argv[])
     double elapsed_time;
     struct timeval tp;
 
-    int max_iterations;                                  // number of iterations
+    int max_iterations=1;                               // number of iterations
 
     if (argc > 1 ) {
         max_iterations=atoi(argv[1]);
-    } else {
-        printf("Maximum iterations [100-4000]?\n");
-        if ( !scanf("%d", &max_iterations)  || max_iterations < 0 ) {
-            printf("wrong input value\nBye...\n");
-            exit(0);
-        } // end if //       
     } // endif //
+    
     printf("Ruuning %d iterations \n",max_iterations);
 
     if (sizeof(real) == 8) {
@@ -79,7 +74,7 @@ int main(int argc, char *argv[])
     
     gettimeofday(&tp,NULL);
     elapsed_time += (tp.tv_sec*1.0e6 + tp.tv_usec);
-    printf ("\n\nIt tooks %14.6e seconds for %d threads to finish\n", elapsed_time*1.0e-6, nthreads);
+    printf ("\n\nIt tooks %14.6e seconds for %d threads to finish\n", elapsed_time*1.0e-6/max_iterations, nthreads);
 
     if (sizeof(real) == 8) {
         printf("Double precision version\n");
