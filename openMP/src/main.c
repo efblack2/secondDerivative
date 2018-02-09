@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         max_iterations=atoi(argv[1]);
     } // endif //
     
-    printf("Ruuning %d iterations \n",max_iterations);
+    printf("Running %d iterations \n",max_iterations);
 
     if (sizeof(real) == 8) {
         printf("Double precision version\n");
