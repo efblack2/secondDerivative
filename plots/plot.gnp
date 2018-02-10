@@ -20,15 +20,15 @@ set grid
 
 set xlabel "Number of Processors/Threads"
 set ylabel "Time [S]"
-     
+
 set title machine
 #set label "" at screen 0.5, 0.9 center font "Arial,11"
-set label "Pure Share Memory" at graph 0.5, 1.035 center font "Arial,11"
+set label "Share Memory Performance Comparison" at graph 0.5, 1.035 center font "Arial,11"
 
 plot machine.'/gnu/MPI_sm.txt'   using 1:6 title "Gnu MPI_{sm}"   with linespoints ls 1,\
      machine.'/gnu/OpenMP.txt'   using 1:6 title "Gnu OpenMP"     with linespoints ls 2,\
      machine.'/intel/MPI_sm.txt' using 1:6 title "Intel MPI_{sm}" with linespoints ls 3,\
      machine.'/intel/OpenMP.txt' using 1:6 title "Intel OpenMP"   with linespoints ls 4,\
      machine.'/pgi/MPI_sm.txt'   using 1:6 title "Pgi MPI_{sm}"   with linespoints ls 5,\
-     machine.'/pgi/OpenMP.txt'   using 1:6 title "Pgi OpenMP"     with linespoints ls 6 
-     
+     machine.'/pgi/OpenMP.txt'   using 1:6 title "Pgi OpenMP"     with linespoints ls 6
+
