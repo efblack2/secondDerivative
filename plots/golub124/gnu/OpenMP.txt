@@ -14,7 +14,3 @@
 14 threads: the min is 0.782824
 15 threads: the min is 0.753312
 16 threads: the min is 0.781372
-17 threads: the min is 0.901334
-18 threads: the min is 0.868289
-19 threads: the min is 0.896017
-20 threads: the min is 0.806648
