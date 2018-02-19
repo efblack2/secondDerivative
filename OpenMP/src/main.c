@@ -24,7 +24,7 @@
 int main(int argc, char *argv[])
 {
     int nthreads=0;
-    double elapsed_time;
+    double elapsed_time_x, elapsed_time_y, elapsed_time_z;
     struct timeval tp;
 
     int max_iterations=1;                               // number of iterations
@@ -53,28 +53,56 @@ int main(int argc, char *argv[])
     t1 = dimCube(LEV2,ROW2,COL2);
     t2 = dimCube(LEV2,ROW2,COL2);
 
-
-    setFun(t1, xdim, ydim, zdim);
-    
-    gettimeofday(&tp,NULL);
-    elapsed_time = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
-
-     
     #pragma omp parallel 
     {
-        for (int n=1 ; n<=max_iterations; ++n) {
-            secDev(t2,t1,xdim,ydim,zdim);
-        }	// end of time loop n = 1,...,nstep //
-        
         #pragma omp single nowait
         nthreads = omp_get_num_threads();
         // end of omp single
     } // end of parallel region //
-    
-    
+
+    setFun(t1, xdim, ydim, zdim);
+
+    ///////////////////// x ///////////////////////    
     gettimeofday(&tp,NULL);
-    elapsed_time += (tp.tv_sec*1.0e6 + tp.tv_usec);
-    printf ("\n\nIt tooks %14.6e seconds for %d threads to finish\n", elapsed_time*1.0e-6/max_iterations, nthreads);
+    elapsed_time_x = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
+    #pragma omp parallel 
+    {
+        for (int n=1 ; n<=max_iterations; ++n) {
+            secDev_x(t2,t1,xdim,ydim,zdim);
+        }	// end of time loop n = 1,...,nstep //
+    } // end of parallel region //
+    gettimeofday(&tp,NULL);
+    elapsed_time_x += (tp.tv_sec*1.0e6 + tp.tv_usec);
+    ///////////////////// x ///////////////////////    
+    
+    ///////////////////// y ///////////////////////    
+    gettimeofday(&tp,NULL);
+    elapsed_time_y = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
+    #pragma omp parallel 
+    {
+        for (int n=1 ; n<=max_iterations; ++n) {
+            secDev_y(t2,t1,xdim,ydim,zdim);
+        }	// end of time loop n = 1,...,nstep //
+    } // end of parallel region //
+    gettimeofday(&tp,NULL);
+    elapsed_time_y += (tp.tv_sec*1.0e6 + tp.tv_usec);
+    ///////////////////// y ///////////////////////    
+    
+
+    ///////////////////// z ///////////////////////    
+    gettimeofday(&tp,NULL);
+    elapsed_time_z = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
+    #pragma omp parallel 
+    {
+        for (int n=1 ; n<=max_iterations; ++n) {
+            secDev_y(t2,t1,xdim,ydim,zdim);
+        }	// end of time loop n = 1,...,nstep //
+    } // end of parallel region //
+    gettimeofday(&tp,NULL);
+    elapsed_time_z += (tp.tv_sec*1.0e6 + tp.tv_usec);
+    ///////////////////// z ///////////////////////    
+    printf ("for %d threads it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n", 
+    nthreads,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_y*1.0e-6/max_iterations,elapsed_time_z*1.0e-6/max_iterations );
 
     if (sizeof(real) == 8) {
         printf("Double precision version\n");

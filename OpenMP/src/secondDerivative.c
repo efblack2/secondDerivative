@@ -5,7 +5,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim, int zdim) 
+void secDev_x(real ***restrict dev,real ***restrict fun, int xdim, int ydim, int zdim) 
 {
     // derivative in x
     #pragma omp for schedule(static) // nowait
@@ -16,7 +16,11 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim, int z
             } // end for //
         } // end for //
     } // end for //
-    
+} // end of secDev_x() //
+
+
+void secDev_y(real ***restrict dev,real ***restrict fun, int xdim, int ydim, int zdim) 
+{
     // derivative in y
     #pragma omp for schedule(static) // nowait
     for(int l = 1; l < zdim; ++l) {
@@ -27,7 +31,11 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim, int z
             
         } // end for //
     } // end for //
+} // end of secDev_y() //
 
+
+void secDev_z(real ***restrict dev,real ***restrict fun, int xdim, int ydim, int zdim) 
+{
     // derivative in z
     #pragma omp for schedule(static) // nowait
     for(int r = 1; r < ydim ; ++r) {
@@ -37,7 +45,8 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim, int z
             } // end for //
         } // end for //
     } // end for //
-} // end of secDev() //
+} // end of secDev_z() //
+
 
 /*
     #pragma omp single
