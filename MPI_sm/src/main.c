@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(sm_comm,&mySharedRank);
     MPI_Comm_size(sm_comm,&sharedSize);
     
-    double elapsed_time;
+    double elapsed_time_x, elapsed_time_y, elapsed_time_z;
     int max_iterations=1;                                  // number of iterations
 
     if (argc > 1 ) {
@@ -77,28 +77,60 @@ int main(int argc, char *argv[])
         setFun(t1, xdim, ydim, zdim);
     } // end if
 
+    //////////////////////////// x //////////////////////////
     MPI_Win_sync(sm_win_t1);
     //MPI_Win_sync(sm_win_t2);
     MPI_Barrier(sm_comm);
-    elapsed_time = -MPI_Wtime();
-    
-
+    elapsed_time_x = -MPI_Wtime();
     for (int n=1 ; n<=max_iterations; ++n) {
-        secDev(t2,t1, xdim, ydim, start,end);
+        secDev_x(t2,t1, xdim, ydim, start,end);
         //MPI_Win_sync(sm_win_t1);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
     }	// end of time loop n = 1,...,nstep //
+    MPI_Barrier(sm_comm);
+    elapsed_time_x += MPI_Wtime();
+    //////////////////////////// x //////////////////////////
+
+
+    //////////////////////////// y //////////////////////////
+    MPI_Win_sync(sm_win_t1);
+    //MPI_Win_sync(sm_win_t2);
+    MPI_Barrier(sm_comm);
+    elapsed_time_y = -MPI_Wtime();
+    for (int n=1 ; n<=max_iterations; ++n) {
+        secDev_y(t2,t1, xdim, ydim, start,end);
+        //MPI_Win_sync(sm_win_t1);
+        MPI_Win_sync(sm_win_t2);
+        MPI_Barrier(sm_comm);
+    }	// end of time loop n = 1,...,nstep //
+    MPI_Barrier(sm_comm);
+    elapsed_time_y += MPI_Wtime();
+    //////////////////////////// y //////////////////////////
+
+    //////////////////////////// z //////////////////////////
+    MPI_Win_sync(sm_win_t1);
+    //MPI_Win_sync(sm_win_t2);
+    MPI_Barrier(sm_comm);
+    elapsed_time_z = -MPI_Wtime();
+    for (int n=1 ; n<=max_iterations; ++n) {
+        secDev_z(t2,t1, xdim, ydim, start,end);
+        //MPI_Win_sync(sm_win_t1);
+        MPI_Win_sync(sm_win_t2);
+        MPI_Barrier(sm_comm);
+    }	// end of time loop n = 1,...,nstep //
+    MPI_Barrier(sm_comm);
+    elapsed_time_z += MPI_Wtime();
+    //////////////////////////// z //////////////////////////
 
 
     MPI_Win_unlock_all(sm_win_t1);
     MPI_Win_unlock_all(sm_win_t2);
-    
-    MPI_Barrier(sm_comm);
-    elapsed_time += MPI_Wtime();
+
     
     if (mySharedRank == root) {
-        printf ("\n\nIt tooks %14.6e seconds for %d processes to finish\n", elapsed_time/max_iterations, sharedSize);
+        printf ("for %d threads it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n", 
+        sharedSize,elapsed_time_x/max_iterations,elapsed_time_y/max_iterations,elapsed_time_z/max_iterations );
         if (sizeof(real) == 8) {
             printf("Double precision version\n");
         } else {

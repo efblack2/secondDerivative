@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int start, int end )  
+void secDev_x(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int start, int end )  
 {
     // derivative in x
     for(int l = start; l < end; ++l) {
@@ -17,8 +17,12 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int st
             } // end for //
         } // end for //
     } // end for //
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
+} // end of secDev_x() //
+
+void secDev_y(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int start, int end )  
+{
     // derivative in y
     for(int l = start; l < end; ++l) {
         for(int c = 1; c < xdim; ++c) {
@@ -27,8 +31,14 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int st
             } // end for //
         } // end for //
     } // end for //
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
+} // end of secDev_y() //
+
+
+
+void secDev_z(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int start, int end )  
+{
     // derivative in z
     for(int r = 1; r < ydim ; ++r) {
         for(int c = 1; c < xdim; ++c) {
@@ -39,7 +49,9 @@ void secDev(real ***restrict dev,real ***restrict fun, int xdim, int ydim,int st
     } // end for //
     //MPI_Barrier(MPI_COMM_WORLD);
 
-} // end of secDev() //
+} // end of secDev_y() //
+
+
 
 /*
     int myWorldRank;
