@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     MPI_Comm_size(sm_comm,&sharedSize);
     
     double elapsed_time_x, elapsed_time_y, elapsed_time_z;
-    int max_iterations=1;                                  // number of iterations
+    int max_iterations=5;                                  // number of iterations
 
     if (argc > 1 ) {
         max_iterations=atoi(argv[1]);
@@ -43,13 +43,7 @@ int main(int argc, char *argv[])
 
     if (mySharedRank == root) {
         printf("Running %d iterations \n",max_iterations);fflush(stdout);
-        if (sizeof(real) == 8) {
-            printf("Double precision version\n");
-        } else {
-            printf("Single precision version\n");
-        } // end if
     } // end if
-    
 
 // Arrays and other variables //
 
@@ -70,63 +64,75 @@ int main(int argc, char *argv[])
     MPI_Win_lock_all(0,sm_win_t2);
 
 
-    const int start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
-    const int end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
     
     if (mySharedRank == root) {
         setFun(t1, xdim, ydim, zdim);
     } // end if
-
-    //////////////////////////// x //////////////////////////
     MPI_Win_sync(sm_win_t1);
-    //MPI_Win_sync(sm_win_t2);
+
+    int start,end;
+     
+    //////////////////////////// x //////////////////////////
+    start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
+    end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
     MPI_Barrier(sm_comm);
     elapsed_time_x = -MPI_Wtime();
-    for (int n=1 ; n<=max_iterations; ++n) {
-        secDev_x(t2,t1, xdim, ydim, start,end);
-        //MPI_Win_sync(sm_win_t1);
+    for (int n=0; n<max_iterations; ++n) {
+        secDer_x(t2,t1, xdim, ydim, start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
-    }	// end of time loop n = 1,...,nstep //
+    }	// end for //
     MPI_Barrier(sm_comm);
     elapsed_time_x += MPI_Wtime();
+    if (sizeof(real) == 8) {
+        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_x, 1, MPI_DOUBLE, MPI_MAX,MPI_COMM_WORLD);
+    } else {
+        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_x, 1, MPI_FLOAT,  MPI_MAX,MPI_COMM_WORLD);
+    } // end if
     //////////////////////////// x //////////////////////////
 
 
     //////////////////////////// y //////////////////////////
-    MPI_Win_sync(sm_win_t1);
-    //MPI_Win_sync(sm_win_t2);
+    start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
+    end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
     elapsed_time_y = -MPI_Wtime();
-    for (int n=1 ; n<=max_iterations; ++n) {
-        secDev_y(t2,t1, xdim, ydim, start,end);
-        //MPI_Win_sync(sm_win_t1);
+    for (int n=0; n<max_iterations; ++n) {
+        secDer_y(t2,t1, ydim, zdim,start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
-    }	// end of time loop n = 1,...,nstep //
+    }	// end for //
     MPI_Barrier(sm_comm);
     elapsed_time_y += MPI_Wtime();
+    if (sizeof(real) == 8) {
+        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_y, 1, MPI_DOUBLE, MPI_MAX,MPI_COMM_WORLD);
+    } else {
+        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_y, 1, MPI_FLOAT,  MPI_MAX,MPI_COMM_WORLD);
+    } // end if
     //////////////////////////// y //////////////////////////
 
     //////////////////////////// z //////////////////////////
-    MPI_Win_sync(sm_win_t1);
-    //MPI_Win_sync(sm_win_t2);
+    start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
+    end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
     elapsed_time_z = -MPI_Wtime();
-    for (int n=1 ; n<=max_iterations; ++n) {
-        secDev_z(t2,t1, xdim, ydim, start,end);
-        //MPI_Win_sync(sm_win_t1);
+    for (int n=0; n<max_iterations; ++n) {
+        secDer_z(t2,t1, ydim, zdim, start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
-    }	// end of time loop n = 1,...,nstep //
+    }	// end for //
     MPI_Barrier(sm_comm);
     elapsed_time_z += MPI_Wtime();
+    if (sizeof(real) == 8) {
+        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_z, 1, MPI_DOUBLE, MPI_MAX,MPI_COMM_WORLD);
+    } else {
+        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_z, 1, MPI_FLOAT,  MPI_MAX,MPI_COMM_WORLD);
+    } // end if
     //////////////////////////// z //////////////////////////
 
 
     MPI_Win_unlock_all(sm_win_t1);
     MPI_Win_unlock_all(sm_win_t2);
-
     
     if (mySharedRank == root) {
         printf ("for %d threads it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n", 
