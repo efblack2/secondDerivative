@@ -5,7 +5,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(secondDerivative_Src 
     src/main.c
-    src/secDev.c
+    src/secondDerivative.c
     src/setFun.c
     PARENT_SCOPE
     )
