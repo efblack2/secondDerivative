@@ -5,7 +5,7 @@ then
   exit 1
 fi
 
-nloops=3
+nloops=5
 np=`grep -c ^processor /proc/cpuinfo`
 #np=4
 
