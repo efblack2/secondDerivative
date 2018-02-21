@@ -1,16 +1,8 @@
-1 threads: the min is 29.613440
-2 threads: the min is 15.546970
-3 threads: the min is 7.097876
-4 threads: the min is 5.427697
-5 threads: the min is 4.498995
-6 threads: the min is 3.938050
-7 threads: the min is 3.253819
-8 threads: the min is 3.212514
-9 threads: the min is 2.790966
-10 threads: the min is 2.615049
-11 threads: the min is 2.262812
-12 threads: the min is 2.240522
-13 threads: the min is 2.068897
-14 threads: the min is 2.133100
-15 threads: the min is 2.284056
-16 threads: the min is 2.326865
+1 39.0024 4.483780e-01 9.509844e+00 2.904422e+01
+2 24.9757 2.954230e-01 6.700707e+00 1.797957e+01
+3 16.865 2.531254e-01 4.502994e+00 1.210887e+01
+4 12.4792 2.022234e-01 3.526196e+00 8.750787e+00
+5 10.9523 1.811112e-01 3.160741e+00 7.610481e+00
+6 9.05843 1.883684e-01 2.778889e+00 6.091176e+00
+7 8.09871 1.957750e-01 2.622599e+00 5.280338e+00
+8 7.6742 1.796580e-01 2.623657e+00 4.870884e+00
