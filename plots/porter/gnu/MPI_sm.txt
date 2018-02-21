@@ -1,16 +1,8 @@
-1 processors: the min is 11.175480
-2 processors: the min is 6.180666
-3 processors: the min is 2.871310
-4 processors: the min is 2.299884
-5 processors: the min is 1.984498
-6 processors: the min is 1.960107
-7 processors: the min is 1.663943
-8 processors: the min is 1.745363
-9 processors: the min is 1.583477
-10 processors: the min is 1.598554
-11 processors: the min is 1.440078
-12 processors: the min is 1.480566
-13 processors: the min is 1.382735
-14 processors: the min is 1.411483
-15 processors: the min is 1.335563
-16 processors: the min is 1.324809
+1 31.1328 3.918086e-01 7.633877e+00 2.310715e+01
+2 27.2723 2.804097e-01 7.944993e+00 1.904692e+01
+3 19.2006 2.990581e-01 5.143424e+00 1.375815e+01
+4 20.8411 2.917666e-01 4.118119e+00 1.643121e+01
+5 14.6807 2.756654e-01 3.378460e+00 1.102655e+01
+6 14.2929 3.158968e-01 3.739347e+00 1.023767e+01
+7 13.2532 2.848274e-01 3.331675e+00 9.636702e+00
+8 12.6251 2.993342e-01 3.623716e+00 8.702041e+00

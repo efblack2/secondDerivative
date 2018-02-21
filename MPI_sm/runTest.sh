@@ -7,7 +7,7 @@ fi
 
 nloops=5
 np=`grep -c ^processor /proc/cpuinfo`
-#np=4
+#np=8
 
 rm -f Mpi_sm_Result.txt
 for i in  `seq 1 $np`; do
@@ -19,7 +19,7 @@ for i in  `seq 1 $np`; do
 done
 
 mkdir -p ../../plots/$(hostname)/$1
-cat Mpi_sm_Result.txt | awk '{}{print $2, $6, $11, $16}{}'  > ../../plots/$(hostname)/$1/MPI_sm.txt
+cat Mpi_sm_Result.txt | awk '{}{print $2, $6+$11+$16, $6, $11, $16}{}'   | sort  -k1,1n -k2,2n   | awk 'BEGIN{ prev=-1} { if ($1 != prev) { print $0; prev=$1}  } END{}'  > ../../plots/$(hostname)/$1/MPI_sm.txt
 
 rm Mpi_sm_Result.txt
 
