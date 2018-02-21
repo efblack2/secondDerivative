@@ -1,11 +1,27 @@
 #!/usr/bin/gnuplot
 # call it as:
-# gnuplot -c plotGnuRatio.gnp stout
+# gnuplot -c plotGnuRatio.gnp stout x=1/y=2/z=3
 #
 machine=ARG1
 
+#set print "-"           # to send prints to stdout
+#print 'hello world'     # to actually print
+
+if (ARG2 == 1) {
+    direction='X';
+} 
+if (ARG2 == 2) {
+    direction='Y';
+} 
+if (ARG2 == 3) {
+    direction='Z';
+}    
+
+plotTitle=machine." in the ".direction." direction" 
+
 set terminal pdf enhanced
-set output machine."Ratio.pdf"
+set output machine.direction."Ratio_gnu.pdf"
+
 set style line 1 ps 0.5 lc rgb "#ff0000";
 set style line 2 ps 0.5 lc rgb "#ff4f00";
 
@@ -19,11 +35,21 @@ set key top left box
 set grid
 
 set xlabel "Number of Processors/Threads"
-set ylabel "Time [S]"
+set ylabel "OpenMP/MPI Ratio"
 
-set title machine
+set title plotTitle
 #set label "" at screen 0.5, 0.9 center font "Arial,11"
 set label "OpenMP to MPI\_{sm} Ratio" at graph 0.5, 1.035 center font "Arial,11"
 
-plot [0:] [0:]   machine.'/gnu/result.txt'   using 1:($12/$6) title "Gnu Compiler"   with linespoints ls 1
+if (ARG2 == 1) {
+    plot [0:] [0:]   machine.'/gnu/result.txt'   using 1:($8/$3) title "Gnu Compiler"   with linespoints ls 1
+} 
+
+if (ARG2 == 2) {
+    plot [0:] [0:]   machine.'/gnu/result.txt'   using 1:($9/$4) title "Gnu Compiler"   with linespoints ls 1
+} 
+
+if (ARG2 == 3) {
+    plot [0:] [0:]   machine.'/gnu/result.txt'   using 1:($10/$5) title "Gnu Compiler"   with linespoints ls 1
+} 
 
