@@ -82,5 +82,5 @@ pdfunite $1XRatio_GnuPin.pdf $1YRatio_GnuPin.pdf $1ZRatio_GnuPin.pdf $1Ratio_Gnu
 rm $1XRatio_GnuPin.pdf $1YRatio_GnuPin.pdf $1ZRatio_GnuPin.pdf
 
 
-#rm `find . -name result*.txt`
+rm `find . -name result*.txt`
 

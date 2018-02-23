@@ -1,0 +1,51 @@
+#!/usr/bin/gnuplot
+# call it as:
+# gnuplot -c plotGnuPin.gnp stout x=1/y=2/z=3
+#
+machine=ARG1
+
+#set print "-"           # to send prints to stdout
+#print 'hello world'     # to actually print
+
+if (ARG2 == 1) {
+    var=3;
+    direction='X'
+} 
+if (ARG2 == 2) {
+    var=4; 
+    direction='Y'
+} 
+if (ARG2 == 3) {
+    var=5; 
+    direction='Z'
+}    
+
+plotTitle=machine." + taskset in the ".direction." direction" 
+
+set terminal pdf enhanced
+
+#set output machine.".pdf"
+set output machine.direction."_GnuPin.pdf"
+
+
+set style line 1 dt 1 ps 0.6 lc rgb "#ff0000";
+set style line 2 dt 4 ps 0.5 lc rgb "#ff4f00";
+
+set style line 3 dt 1 ps 0.6 lc rgb "#0000ff";
+set style line 4 dt 4 ps 0.5 lc rgb "#0099ff";
+
+set style line 5 dt 1 ps 0.6 lc rgb "#00ff00";
+set style line 6 dt 4 ps 0.5 lc rgb "#00ff99";
+
+set key top right box
+set grid
+
+set xlabel "Number of Processors/Threads"
+set ylabel "Time [S]"
+
+set title plotTitle
+#set label "" at screen 0.5, 0.9 center font "Arial,11"
+set label "Shared Memory Performance Comparison" at graph 0.5, 1.035 center font "Arial,11"
+
+plot[0:][0:] machine.'/gnu/MPI_sm_Pin.txt'   using 1:var title "Gnu MPI_{sm}"   with linespoints ls 1,\
+             machine.'/gnu/OpenMP_Pin.txt'   using 1:var title "Gnu OpenMP"     with linespoints ls 2
