@@ -20,7 +20,7 @@ if (ARG2 == 3) {
 plotTitle=machine." in the ".direction." direction" 
 
 set terminal pdf enhanced
-set output machine.direction."Ratio_gnu.pdf"
+set output machine.direction."Ratio_Gnu.pdf"
 
 set style line 1 dt 1 ps 0.6 lc rgb "#ff0000";
 set style line 2 dt 4 ps 0.5 lc rgb "#ff4f00";
