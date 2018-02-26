@@ -9,7 +9,7 @@ real*** dimCube(int high, int row, int col)
       
     cube       = (real ***)  malloc(  high  * sizeof(real**));        
     cube[0]    = (real  **)  malloc(  high  * row  * sizeof(real*));     
-    cube[0][0] = (real   *)  calloc(( high  * row * col),sizeof(real));      
+    cube[0][0] = (real   *)  malloc(( high  * row * col) * sizeof(real));      
 
     for(int k=0; k < high; ++k){
         cube[k] = cube[0]  + (k * row); 

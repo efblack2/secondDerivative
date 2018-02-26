@@ -3,6 +3,7 @@
 void setFun(real ***a, int xdim, int ydim, int zdim) 
 {
     int k = 0;
+    #pragma omp parallel for firstprivate(k)
     for(int l = 1; l < zdim; ++l) {
         for(int r = 1; r < ydim ; ++r) {
             for(int c = 1; c < xdim; ++c) {
