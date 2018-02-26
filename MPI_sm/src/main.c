@@ -63,18 +63,21 @@ int main(int argc, char *argv[])
     MPI_Win_lock_all(0,sm_win_t1);
     MPI_Win_lock_all(0,sm_win_t2);
 
-
-    
-    if (mySharedRank == root) {
-        setFun(t1, xdim, ydim, zdim);
-    } // end if
-    MPI_Win_sync(sm_win_t1);
-
     int start,end;
-     
-    //////////////////////////// x //////////////////////////
     start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
     end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
+    
+    printf("i am %d, my set is: %d %d\n",mySharedRank,start,end);
+    MPI_Finalize();
+    exit(0);
+    
+    setFun(t1, xdim, ydim, start, end);
+    MPI_Win_sync(sm_win_t1);
+
+     
+    //////////////////////////// x //////////////////////////
+    //start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
+    //end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
     MPI_Barrier(sm_comm);
     elapsed_time_x = -MPI_Wtime();
     for (int n=0; n<max_iterations; ++n) {
@@ -135,7 +138,7 @@ int main(int argc, char *argv[])
     MPI_Win_unlock_all(sm_win_t2);
     
     if (mySharedRank == root) {
-        printf ("for %d threads it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n", 
+        printf ("for %d processors it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n", 
         sharedSize,elapsed_time_x/max_iterations,elapsed_time_y/max_iterations,elapsed_time_z/max_iterations );
         if (sizeof(real) == 8) {
             printf("Double precision version\n");

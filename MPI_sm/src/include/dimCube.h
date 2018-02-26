@@ -38,7 +38,7 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, int myRank, MPI_Co
 
     MPI_Barrier(*sm_comm);  // is this really needed? //
 
-
+/*
     MPI_Win_lock_all(0,*sm_win);
     
     if (myRank==0) {
@@ -54,8 +54,8 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, int myRank, MPI_Co
     MPI_Win_sync(*sm_win);
     MPI_Barrier(*sm_comm);
     MPI_Win_unlock_all(*sm_win);
-
     MPI_Barrier(*sm_comm);  // is this really needed? //
+*/
       
    return cube;
    
