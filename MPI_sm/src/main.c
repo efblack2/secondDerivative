@@ -67,10 +67,6 @@ int main(int argc, char *argv[])
     start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
     end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
     
-    printf("i am %d, my set is: %d %d\n",mySharedRank,start,end);
-    MPI_Finalize();
-    exit(0);
-    
     setFun(t1, xdim, ydim, start, end);
     MPI_Win_sync(sm_win_t1);
 
