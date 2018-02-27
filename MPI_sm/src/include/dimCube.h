@@ -1,26 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h> 
+#include "myMPI.h"
 
 #include "real.h"
 
-real*** dimCube(int level, int row, int col, MPI_Win *sm_win, int myRank, MPI_Comm *sm_comm) 
+real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm) 
 {
 
+    int start,end;
+    int myRank,commSize;
+    MPI_Comm_rank(*sm_comm,&myRank);
+    MPI_Comm_size(*sm_comm,&commSize);
 
-    const int size = level  * row * col;
+    MPI_Info myInfo;
+    MPI_Info_create(&myInfo);
+    MPI_Info_set(myInfo,"alloc_shared_noncontig", "false");
+
+
+    start = BLOCK_LOW (myRank,commSize,(level));
+    end   = BLOCK_HIGH(myRank,commSize,(level));
+    
+    const int size = (end+1-start)  * row * col;
+    //const int size = level * row * col;
     real ***cube;
       
     cube       = (real ***)  malloc(  level         * sizeof(real**));        
     cube[0]    = (real  **)  malloc(  level  * row  * sizeof(real*));     
     //cube[0][0] = (real   *)  calloc(( high  * row * col),sizeof(real));      
     
+    MPI_Win_allocate_shared((MPI_Aint) size*sizeof(real), sizeof(real), myInfo,*sm_comm,&cube[0][0],sm_win);
+    /*
     if (myRank == 0) {
         MPI_Win_allocate_shared((MPI_Aint) size*sizeof(real), sizeof(real), MPI_INFO_NULL,*sm_comm,&cube[0][0],sm_win);
     } else {
         MPI_Win_allocate_shared((MPI_Aint) 0,                 sizeof(real), MPI_INFO_NULL,*sm_comm,&cube[0][0],sm_win);
     } // end if //
-    
+    */
     
     
     MPI_Barrier(*sm_comm);  // is this really needed? //

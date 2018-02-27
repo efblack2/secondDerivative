@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
     MPI_Win sm_win_t1;
     MPI_Win sm_win_t2;
     
-    t1 = dimCube(LEV2,ROW2,COL2, &sm_win_t1, mySharedRank,&sm_comm);
-    t2 = dimCube(LEV2,ROW2,COL2, &sm_win_t2, mySharedRank,&sm_comm);
+    t1 = dimCube(LEV2,ROW2,COL2, &sm_win_t1, &sm_comm);
+    t2 = dimCube(LEV2,ROW2,COL2, &sm_win_t2, &sm_comm);
 
     MPI_Win_lock_all(0,sm_win_t1);
     MPI_Win_lock_all(0,sm_win_t2);
@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
     
     setFun(t1, xdim, ydim, start, end);
     MPI_Win_sync(sm_win_t1);
+    MPI_Barrier(sm_comm);
+    MPI_Win_unlock_all(sm_win_t1);
 
      
     //////////////////////////// x //////////////////////////
@@ -130,7 +132,6 @@ int main(int argc, char *argv[])
     //////////////////////////// z //////////////////////////
 
 
-    MPI_Win_unlock_all(sm_win_t1);
     MPI_Win_unlock_all(sm_win_t2);
     
     if (mySharedRank == root) {
