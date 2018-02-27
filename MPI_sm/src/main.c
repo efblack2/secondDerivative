@@ -9,15 +9,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <math.h>
 #include <sys/time.h>
 #include <mpi.h>
 #include "real.h"
 #include "dimCube.h"
 #include "prototypes.h"
 #include "myMPI.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -32,6 +29,8 @@ int main(int argc, char *argv[])
     int mySharedRank,sharedSize;
     MPI_Comm_rank(sm_comm,&mySharedRank);
     MPI_Comm_size(sm_comm,&sharedSize);
+    
+    struct timeval tp;
     
     double elapsed_time_x, elapsed_time_y, elapsed_time_z;
     int max_iterations=5;                                  // number of iterations
@@ -77,58 +76,58 @@ int main(int argc, char *argv[])
     //start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
     //end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
     MPI_Barrier(sm_comm);
-    elapsed_time_x = -MPI_Wtime();
+    //elapsed_time_x = -MPI_Wtime();
+    gettimeofday(&tp,NULL);
+    elapsed_time_x = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
     for (int n=0; n<max_iterations; ++n) {
         secDer_x(t2,t1, xdim, ydim, start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
-    }	// end for //
-    MPI_Barrier(sm_comm);
-    elapsed_time_x += MPI_Wtime();
-    if (sizeof(real) == 8) {
-        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_x, 1, MPI_DOUBLE, MPI_MAX,MPI_COMM_WORLD);
-    } else {
-        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_x, 1, MPI_FLOAT,  MPI_MAX,MPI_COMM_WORLD);
-    } // end if
+    } // end for //
+    //MPI_Barrier(sm_comm);
+    //elapsed_time_x += MPI_Wtime();
+    gettimeofday(&tp,NULL);
+    elapsed_time_x += (tp.tv_sec*1.0e6 + tp.tv_usec);
+    MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_x, 1, MPI_DOUBLE, MPI_MAX,sm_comm);
+    
     //////////////////////////// x //////////////////////////
-
 
     //////////////////////////// y //////////////////////////
     start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
     end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
-    elapsed_time_y = -MPI_Wtime();
+    //elapsed_time_y = -MPI_Wtime();
+    gettimeofday(&tp,NULL);
+    elapsed_time_y = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
     for (int n=0; n<max_iterations; ++n) {
         secDer_y(t2,t1, ydim, zdim,start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
-    }	// end for //
-    MPI_Barrier(sm_comm);
-    elapsed_time_y += MPI_Wtime();
-    if (sizeof(real) == 8) {
-        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_y, 1, MPI_DOUBLE, MPI_MAX,MPI_COMM_WORLD);
-    } else {
-        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_y, 1, MPI_FLOAT,  MPI_MAX,MPI_COMM_WORLD);
-    } // end if
+    } // end for //
+    //MPI_Barrier(sm_comm);
+    //elapsed_time_y += MPI_Wtime();
+    gettimeofday(&tp,NULL);
+    elapsed_time_y += (tp.tv_sec*1.0e6 + tp.tv_usec);
+    MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_y, 1, MPI_DOUBLE, MPI_MAX,sm_comm);
     //////////////////////////// y //////////////////////////
 
     //////////////////////////// z //////////////////////////
     start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
     end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
-    elapsed_time_z = -MPI_Wtime();
+    //elapsed_time_z = -MPI_Wtime();
+    gettimeofday(&tp,NULL);
+    elapsed_time_z = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
     for (int n=0; n<max_iterations; ++n) {
         secDer_z(t2,t1, ydim, zdim, start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
-    }	// end for //
-    MPI_Barrier(sm_comm);
-    elapsed_time_z += MPI_Wtime();
-    if (sizeof(real) == 8) {
-        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_z, 1, MPI_DOUBLE, MPI_MAX,MPI_COMM_WORLD);
-    } else {
-        MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_z, 1, MPI_FLOAT,  MPI_MAX,MPI_COMM_WORLD);
-    } // end if
+    } // end for //
+    //MPI_Barrier(sm_comm);
+    //elapsed_time_z += MPI_Wtime();
+    gettimeofday(&tp,NULL);
+    elapsed_time_z += (tp.tv_sec*1.0e6 + tp.tv_usec);
+    MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_z, 1, MPI_DOUBLE, MPI_MAX,sm_comm);
     //////////////////////////// z //////////////////////////
 
 
@@ -136,7 +135,7 @@ int main(int argc, char *argv[])
     
     if (mySharedRank == root) {
         printf ("for %d processors it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n", 
-        sharedSize,elapsed_time_x/max_iterations,elapsed_time_y/max_iterations,elapsed_time_z/max_iterations );
+        sharedSize,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_y*1.0e-6/max_iterations,elapsed_time_z*1.0e-6/max_iterations );
         if (sizeof(real) == 8) {
             printf("Double precision version\n");
         } else {
