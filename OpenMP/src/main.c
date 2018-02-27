@@ -9,17 +9,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-/*
-#include <ctype.h>
-#include <math.h>
-*/
 #include <sys/time.h>
-
 #include <omp.h> 
 #include "real.h"
 #include "dimCube.h"
 #include "prototypes.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -57,7 +51,7 @@ int main(int argc, char *argv[])
         for (int n=0; n<max_iterations; ++n) {
             secDer_x(t2,t1,xdim,ydim,zdim);
             #pragma omp barrier
-        }	// end for //
+        } // end for //
     } // end of parallel region //
     gettimeofday(&tp,NULL);
     elapsed_time_x += (tp.tv_sec*1.0e6 + tp.tv_usec);
@@ -71,7 +65,7 @@ int main(int argc, char *argv[])
         for (int n=0; n<max_iterations; ++n) {
             secDer_y(t2,t1,xdim,ydim,zdim);
             #pragma omp barrier
-        }	// end for //
+        } // end for //
     } // end of parallel region //
     gettimeofday(&tp,NULL);
     elapsed_time_y += (tp.tv_sec*1.0e6 + tp.tv_usec);
@@ -86,7 +80,7 @@ int main(int argc, char *argv[])
         for (int n=0; n<max_iterations; ++n) {
             secDer_z(t2,t1,xdim,ydim,zdim);
             #pragma omp barrier
-        }	// end for //
+        } // end for //
     } // end of parallel region //
     gettimeofday(&tp,NULL);
     elapsed_time_z += (tp.tv_sec*1.0e6 + tp.tv_usec);
@@ -96,7 +90,7 @@ int main(int argc, char *argv[])
     {
         #pragma omp master
         nthreads = omp_get_num_threads();
-        // end of omp single
+        // end of omp master
     } // end of parallel region //
     
         

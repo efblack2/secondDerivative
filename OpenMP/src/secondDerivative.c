@@ -2,10 +2,7 @@
 #include "real.h"
 #include "prototypes.h"
 
-#include<stdio.h>
-#include<stdlib.h>
-
-void secDer_x(real ***restrict der,real ***restrict fun, int xdim, int ydim, int zdim) 
+void secDer_x(real ***restrict der,real ***fun, int xdim, int ydim, int zdim) 
 {
     // derivative in x
     #pragma omp for schedule(static) nowait
@@ -18,8 +15,7 @@ void secDer_x(real ***restrict der,real ***restrict fun, int xdim, int ydim, int
     } // end for //
 } // end of secDer_x() //
 
-
-void secDer_y(real ***restrict der,real ***restrict fun, int xdim, int ydim, int zdim) 
+void secDer_y(real ***restrict der,real ***fun, int xdim, int ydim, int zdim) 
 {
     // derivative in y
     #pragma omp for schedule(static) nowait
@@ -27,14 +23,12 @@ void secDer_y(real ***restrict der,real ***restrict fun, int xdim, int ydim, int
         for(int l = 1; l < zdim; ++l) {
             for(int r = 1; r < ydim ; ++r) {
                 der[l][r][c] =  0.25*(fun[l][r+1][c] + fun[l][r-1][c] - 2.0 * fun[l][r][c]);
-            } // end for //
-            
+            } // end for //            
         } // end for //
     } // end for //
 } // end of secDer_y() //
 
-
-void secDer_z(real ***restrict der,real ***restrict fun, int xdim, int ydim, int zdim) 
+void secDer_z(real ***restrict der,real ***fun, int xdim, int ydim, int zdim) 
 {
     // derivative in z
     #pragma omp for schedule(static) nowait

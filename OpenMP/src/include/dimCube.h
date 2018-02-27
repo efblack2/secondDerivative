@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "real.h"
 
 real*** dimCube(int high, int row, int col) 
