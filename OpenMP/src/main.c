@@ -1,12 +1,3 @@
-// size of plate
-#define ROWS       4094
-#define COLUMNS    1022
-#define LEVELS     126
-
-#define ROW2       (ROWS+2)
-#define COL2       (COLUMNS+2)
-#define LEV2       (LEVELS+2)
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -14,6 +5,7 @@
 #include "real.h"
 #include "dimCube.h"
 #include "prototypes.h"
+#include "dataDef.h"
 
 int main(int argc, char *argv[])
 {
