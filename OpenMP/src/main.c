@@ -1,7 +1,7 @@
 // size of plate
-#define ROWS       640
-#define COLUMNS    640
-#define LEVELS     640
+#define ROWS       4094
+#define COLUMNS    2046
+#define LEVELS     510
 
 #define ROW2       (ROWS+2)
 #define COL2       (COLUMNS+2)
@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <omp.h> 
+#include <omp.h>
 #include "real.h"
 #include "dimCube.h"
 #include "prototypes.h"
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     if (argc > 1 ) {
         max_iterations=atoi(argv[1]);
     } // endif //
-    
+
     printf("Running %d iterations \n",max_iterations);
 
 
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     const int xdim=ROW2-1;
     const int ydim=COL2-1;
     const int zdim=LEV2-1;
-    
+
     real ***t1, ***t2;
     t1 = dimCube(LEV2,ROW2,COL2);
     t2 = dimCube(LEV2,ROW2,COL2);
@@ -43,10 +43,10 @@ int main(int argc, char *argv[])
 
     setFun(t1, xdim, ydim, zdim);
 
-    ///////////////////// x ///////////////////////    
+    ///////////////////// x ///////////////////////
     gettimeofday(&tp,NULL);
-    elapsed_time_x = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
-    #pragma omp parallel 
+    elapsed_time_x = -(tp.tv_sec*1.0e6 + tp.tv_usec);
+    #pragma omp parallel
     {
         for (int n=0; n<max_iterations; ++n) {
             secDer_x(t2,t1,xdim,ydim,zdim);
@@ -55,12 +55,12 @@ int main(int argc, char *argv[])
     } // end of parallel region //
     gettimeofday(&tp,NULL);
     elapsed_time_x += (tp.tv_sec*1.0e6 + tp.tv_usec);
-    ///////////////////// x ///////////////////////    
-    
-    ///////////////////// y ///////////////////////    
+    ///////////////////// x ///////////////////////
+
+    ///////////////////// y ///////////////////////
     gettimeofday(&tp,NULL);
-    elapsed_time_y = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
-    #pragma omp parallel 
+    elapsed_time_y = -(tp.tv_sec*1.0e6 + tp.tv_usec);
+    #pragma omp parallel
     {
         for (int n=0; n<max_iterations; ++n) {
             secDer_y(t2,t1,xdim,ydim,zdim);
@@ -69,13 +69,13 @@ int main(int argc, char *argv[])
     } // end of parallel region //
     gettimeofday(&tp,NULL);
     elapsed_time_y += (tp.tv_sec*1.0e6 + tp.tv_usec);
-    ///////////////////// y ///////////////////////    
-    
+    ///////////////////// y ///////////////////////
 
-    ///////////////////// z ///////////////////////    
+
+    ///////////////////// z ///////////////////////
     gettimeofday(&tp,NULL);
-    elapsed_time_z = -(tp.tv_sec*1.0e6 + tp.tv_usec);  
-    #pragma omp parallel 
+    elapsed_time_z = -(tp.tv_sec*1.0e6 + tp.tv_usec);
+    #pragma omp parallel
     {
         for (int n=0; n<max_iterations; ++n) {
             secDer_z(t2,t1,xdim,ydim,zdim);
@@ -85,18 +85,18 @@ int main(int argc, char *argv[])
     gettimeofday(&tp,NULL);
     elapsed_time_z += (tp.tv_sec*1.0e6 + tp.tv_usec);
     ///////////////////// z ///////////////////////
-    
-    #pragma omp parallel 
+
+    #pragma omp parallel
     {
         #pragma omp master
         nthreads = omp_get_num_threads();
         // end of omp master
     } // end of parallel region //
-    
-        
-    printf ("for %d threads it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n", 
+
+
+    printf ("for %d threads it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n",
     nthreads,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_y*1.0e-6/max_iterations,elapsed_time_z*1.0e-6/max_iterations );
-    
+
     freeCube(&t2);
     freeCube(&t1);
 
