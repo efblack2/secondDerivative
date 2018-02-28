@@ -41,6 +41,7 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
     MPI_Aint sz;
     int dispUnit;
     MPI_Win_shared_query(*sm_win, MPI_PROC_NULL, &sz,&dispUnit,&cube[0][0]);
+    //MPI_Win_shared_query(*sm_win, myRank, &sz,&dispUnit,&cube[0][0]);
     
     for(int l=0; l < level; ++l){
         cube[l] = cube[0]  + (l * row); 

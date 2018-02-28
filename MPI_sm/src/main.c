@@ -85,14 +85,14 @@ int main(int argc, char *argv[])
     //////////////////////////// x //////////////////////////
 
     //////////////////////////// y //////////////////////////
-    start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
-    end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
+    //start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
+    //end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
     //elapsed_time_y = -MPI_Wtime();
     gettimeofday(&tp,NULL);
     elapsed_time_y = -(tp.tv_sec*1.0e6 + tp.tv_usec);
     for (int n=0; n<max_iterations; ++n) {
-        secDer_y(t2,t1, ydim, zdim,start,end);
+        secDer_y(t2,t1, xdim, ydim, start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
     } // end for //
@@ -104,14 +104,14 @@ int main(int argc, char *argv[])
     //////////////////////////// y //////////////////////////
 
     //////////////////////////// z //////////////////////////
-    start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
-    end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
+    //start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
+    //end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
     //elapsed_time_z = -MPI_Wtime();
     gettimeofday(&tp,NULL);
     elapsed_time_z = -(tp.tv_sec*1.0e6 + tp.tv_usec);
     for (int n=0; n<max_iterations; ++n) {
-        secDer_z(t2,t1, ydim, zdim, start,end);
+        secDer_z(t2,t1, xdim, ydim, start,end);
         MPI_Win_sync(sm_win_t2);
         MPI_Barrier(sm_comm);
     } // end for //
