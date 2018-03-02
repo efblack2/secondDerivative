@@ -46,10 +46,11 @@ set title plotTitle
 #set label "" at screen 0.5, 0.9 center font "Arial,11"
 set label "Shared Memory Performance Comparison" at graph 0.5, 1.035 center font "Arial,11"
 
-plot machine.'/gnu/MPI_sm.txt'   using 1:var title "Gnu MPI_{sm}"   with linespoints ls 1,\
-     machine.'/gnu/OpenMP.txt'   using 1:var title "Gnu OpenMP"     with linespoints ls 2,\
-     machine.'/intel/MPI_sm.txt' using 1:var title "Intel MPI_{sm}" with linespoints ls 3,\
-     machine.'/intel/OpenMP.txt' using 1:var title "Intel OpenMP"   with linespoints ls 4,\
-     machine.'/pgi/MPI_sm.txt'   using 1:var title "Pgi MPI_{sm}"   with linespoints ls 5,\
-     machine.'/pgi/OpenMP.txt'   using 1:var title "Pgi OpenMP"     with linespoints ls 6
+plot[0:][0:] \
+            machine.'/gnu/MPI_sm.txt'   using 1:var title "Gnu MPI_{sm}"   with linespoints ls 1,\
+            machine.'/gnu/OpenMP.txt'   using 1:var title "Gnu OpenMP"     with linespoints ls 2,\
+            machine.'/intel/MPI_sm.txt' using 1:var title "Intel MPI_{sm}" with linespoints ls 3,\
+            machine.'/intel/OpenMP.txt' using 1:var title "Intel OpenMP"   with linespoints ls 4,\
+            machine.'/pgi/MPI_sm.txt'   using 1:var title "Pgi MPI_{sm}"   with linespoints ls 5,\
+            machine.'/pgi/OpenMP.txt'   using 1:var title "Pgi OpenMP"     with linespoints ls 6
 
