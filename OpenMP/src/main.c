@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     #pragma omp parallel
     {
         for (int n=0; n<max_iterations; ++n) {
-            secDer_x(t2,t1,xdim,ydim,zdim);
+            secDer_x(&t2[0][0][0],&t1[0][0][0],xdim,ydim,zdim);
             #pragma omp barrier
         } // end for //
     } // end of parallel region //
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     #pragma omp parallel
     {
         for (int n=0; n<max_iterations; ++n) {
-            secDer_y(t2,t1,xdim,ydim,zdim);
+            secDer_y(&t2[0][0][0],&t1[0][0][0],xdim,ydim,zdim);
             #pragma omp barrier
         } // end for //
     } // end of parallel region //
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     #pragma omp parallel
     {
         for (int n=0; n<max_iterations; ++n) {
-            secDer_z(t2,t1,xdim,ydim,zdim);
+            secDer_z(&t2[0][0][0],&t1[0][0][0],xdim,ydim,zdim);
             #pragma omp barrier
         } // end for //
     } // end of parallel region //
