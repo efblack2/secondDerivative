@@ -40,10 +40,6 @@ int main(int argc, char *argv[])
 
     real ***t1, ***t2;
 
-    const int xdim=ROW2-1;
-    const int ydim=COL2-1;
-    const int zdim=LEV2-1;
-
 
     MPI_Win sm_win_t1;
     MPI_Win sm_win_t2;
@@ -54,19 +50,25 @@ int main(int argc, char *argv[])
     MPI_Win_lock_all(0,sm_win_t1);
     MPI_Win_lock_all(0,sm_win_t2);
 
-    int start,end;
-    start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
-    end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
 
+    const int xdim=ROW2-1;
+    const int ydim=COL2-1;
+
+
+    int start = 0;
+    int end   = 1 + BLOCK_HIGH(mySharedRank,sharedSize,LEV2) -  BLOCK_LOW (mySharedRank,sharedSize,LEV2);
+    
     setFun(t1, xdim, ydim, start, end);
+    
+    if (mySharedRank==0) ++start;
+    if (mySharedRank==sharedSize-1) --end;
+
     MPI_Win_sync(sm_win_t1);
     MPI_Barrier(sm_comm);
     MPI_Win_unlock_all(sm_win_t1);
 
 
     //////////////////////////// x //////////////////////////
-    //start = BLOCK_LOW (mySharedRank,sharedSize,(zdim-1))+1;
-    //end   = BLOCK_HIGH(mySharedRank,sharedSize,(zdim-1))+2;
     MPI_Barrier(sm_comm);
     //elapsed_time_x = -MPI_Wtime();
     gettimeofday(&tp,NULL);
@@ -85,8 +87,6 @@ int main(int argc, char *argv[])
     //////////////////////////// x //////////////////////////
 
     //////////////////////////// y //////////////////////////
-    //start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
-    //end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
     //elapsed_time_y = -MPI_Wtime();
     gettimeofday(&tp,NULL);
@@ -104,8 +104,6 @@ int main(int argc, char *argv[])
     //////////////////////////// y //////////////////////////
 
     //////////////////////////// z //////////////////////////
-    //start = BLOCK_LOW (mySharedRank,sharedSize,(xdim-1))+1;
-    //end   = BLOCK_HIGH(mySharedRank,sharedSize,(xdim-1))+2;
     MPI_Barrier(sm_comm);
     //elapsed_time_z = -MPI_Wtime();
     gettimeofday(&tp,NULL);
