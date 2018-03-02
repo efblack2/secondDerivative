@@ -42,6 +42,7 @@ void secDer_z(real *restrict der,real *fun, int xdim, int ydim,int start, int en
             for(int l = start; l < end; ++l) {
                 int k = c + r*COL2 + l*COL2*ROW2;
                 der[k] =  0.25*(fun[k+COL2*ROW2] + fun[k-COL2*ROW2] - 2.0 * fun[k]);
+                //der[l][r][c] =  0.25*(fun[l+1][r][c] + fun[l-1][r][c] - 2.0 * fun[l][r][c]);
             } // end for //
         } // end for //
     } // end for //
