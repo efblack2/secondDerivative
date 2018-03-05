@@ -1,3 +1,4 @@
+#include <omp.h>
 #include "real.h"
 
 real*** dimCube(int high, int row, int col)

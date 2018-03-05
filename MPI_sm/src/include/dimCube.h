@@ -2,11 +2,6 @@
 #include "myMPI.h"
 #include "real.h"
 
-// erase //
-#include <stdio.h>
-#include <stdlib.h>
-// erase //
-
 real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
 {
 
