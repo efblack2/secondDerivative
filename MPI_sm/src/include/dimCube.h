@@ -14,23 +14,25 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
     MPI_Info_set(myInfo,"alloc_shared_noncontig", "false");
 
 
-    int start,end, locLevSize;
-    start = BLOCK_LOW (myRank,commSize,(level));
-    end   = BLOCK_HIGH(myRank,commSize,(level));
-    locLevSize=1+end-start;
+    int start,end, localLevel;
+    start = BLOCK_LOW (myRank,commSize,(level-2));
+    end   = BLOCK_HIGH(myRank,commSize,(level-2));
+    localLevel=1+end-start;
 
+    if (myRank == 0  || myRank == commSize-1 ) ++localLevel;
+    
 
     //const int size = level * row * col;
     real ***cube;
 
-    cube       = (real ***)  malloc( locLevSize         * sizeof(real**));
-    cube[0]    = (real  **)  malloc( locLevSize  * row  * sizeof(real*));
+    cube       = (real ***)  malloc( localLevel         * sizeof(real**));
+    cube[0]    = (real  **)  malloc( localLevel  * row  * sizeof(real*));
     //cube[0][0] = (real   *)  calloc(( high  * row * col),sizeof(real));
 
     MPI_Aint sz;
     int dispUnit;
 
-    MPI_Win_allocate_shared((MPI_Aint) (locLevSize * row * col)*sizeof(real), sizeof(real), myInfo,*sm_comm,&cube[0][0],sm_win);
+    MPI_Win_allocate_shared((MPI_Aint) (localLevel * row * col)*sizeof(real), sizeof(real), myInfo,*sm_comm,&cube[0][0],sm_win);
     MPI_Win_shared_query(*sm_win, myRank, &sz,&dispUnit,&cube[0][0]);
 
     /*
@@ -44,7 +46,7 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
 
 
     // creating the cube array
-    for(int l=0; l < locLevSize; ++l){
+    for(int l=0; l < localLevel; ++l){
         cube[l] = cube[0]  + (l * row);
         for(int r=0; r < row; ++r){
             cube[l][r] = cube[0][0]  +  (l *  row * col )  + r * col;
@@ -56,7 +58,7 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
 
     MPI_Win_lock_all(0,*sm_win);
 
-    for (int l=0; l<locLevSize; ++l){
+    for (int l=0; l<localLevel; ++l){
         for (int r=0; r<row; ++r){
             for (int c=0; c<col; ++c){
                 cube[l][r][c] =  (real) 0.0;
