@@ -18,7 +18,8 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
     end   = BLOCK_HIGH(myRank,commSize,(level-2));
     localLevel=1+end-start;
 
-    if (myRank == 0  || myRank == commSize-1 ) ++localLevel;
+    if (myRank == 0) ++localLevel;
+    if (myRank == commSize-1 ) ++localLevel;
     
 
     //const int size = level * row * col;
