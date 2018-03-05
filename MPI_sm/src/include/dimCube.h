@@ -4,7 +4,6 @@
 
 real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
 {
-
     int myRank,commSize;
     MPI_Comm_rank(*sm_comm,&myRank);
     MPI_Comm_size(*sm_comm,&commSize);

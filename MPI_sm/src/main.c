@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
 
 // Arrays and other variables //
 
-    real ***t1, ***t2;
 
+    real ***t1, ***t2;
 
     MPI_Win sm_win_t1;
     MPI_Win sm_win_t2;
@@ -56,12 +56,14 @@ int main(int argc, char *argv[])
 
 
     int start = 0;
-    int end   = 1 + BLOCK_HIGH(mySharedRank,sharedSize,LEV2) -  BLOCK_LOW (mySharedRank,sharedSize,LEV2);
+    int end   = 1 + BLOCK_HIGH(mySharedRank,sharedSize,LEVELS) -  BLOCK_LOW (mySharedRank,sharedSize,LEVELS);
+
+    if (mySharedRank == 0 ) {
+        ++start;
+        ++end;
+    } // end if //    
     
     setFun(t1, xdim, ydim, start, end);
-    
-    if (mySharedRank==0) ++start;
-    if (mySharedRank==sharedSize-1) --end;
 
     MPI_Win_sync(sm_win_t1);
     MPI_Barrier(sm_comm);
