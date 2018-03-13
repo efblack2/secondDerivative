@@ -1,7 +1,7 @@
 #!/bin/bash
-if [ "$#" -ne 1 ]
+if [ "$#" -lt 1 ]
 then
-  echo "Usage: $0  compilerResults"
+  echo "Usage: $0  compilerResults [numberOfIterations]"
   exit 1
 fi
 
@@ -14,7 +14,7 @@ for i in  `seq 1 $np`; do
 
     for j in  `seq 1 $nloops`; do
         echo number of processors: $i
-        mpiexec -n $i ./secondDerivative  | grep finish >>  Mpi_sm_Result.txt
+        mpiexec -n $i ./secondDerivative $2 | grep finish >>  Mpi_sm_Result.txt
     done
 done
 
