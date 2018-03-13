@@ -6,6 +6,10 @@ then
 fi
 
 nloops=5
+# needed by intel compiler in Blue Waters
+export KMP_AFFINITY=disabled
+# needed by intel compiler in Blue Waters
+
 np=`grep -c ^processor /proc/cpuinfo`
 #np=8
 
