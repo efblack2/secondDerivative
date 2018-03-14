@@ -21,7 +21,7 @@ cd ../../
 
 
 source setPgi 18.1
-source setPgiMpi 18.10
+source setPgiMpi 18.1
 
 cd OpenMP/buildPgi
 make clean; make
