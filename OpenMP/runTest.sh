@@ -10,8 +10,9 @@ nloops=5
 export KMP_AFFINITY=disabled
 # needed by intel compiler in Blue Waters
 
-np=`grep -c ^processor /proc/cpuinfo`
-#np=4
+npt=`grep -c ^processor /proc/cpuinfo`
+np="$(($npt / 1))"
+
 
 rm -f OpenMp_Result.txt
 for i in  `seq 1 $np`; do

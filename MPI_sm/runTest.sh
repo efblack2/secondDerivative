@@ -6,8 +6,8 @@ then
 fi
 
 nloops=5
-np=`grep -c ^processor /proc/cpuinfo`
-#np=8
+npt=`grep -c ^processor /proc/cpuinfo`
+np="$(($npt / 1))"
 
 rm -f Mpi_sm_Result.txt
 for i in  `seq 1 $np`; do

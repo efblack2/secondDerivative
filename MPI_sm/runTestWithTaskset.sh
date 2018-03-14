@@ -1,20 +1,20 @@
 #!/bin/bash
-if [ "$#" -ne 1 ] 
+if [ "$#" -lt 1 ] 
 then
-  echo "Usage: $0  compilerResults"
+  echo "Usage: $0  compilerResults [numberOfIterations]"
   exit 1
 fi
 
 nloops=5
-np=`grep -c ^processor /proc/cpuinfo`
-#np=8
+npt=`grep -c ^processor /proc/cpuinfo`
+np="$(($npt / 1))"
 
 rm -f Mpi_sm_Result.txt
 for i in  `seq 1 $np`; do
     npm1=$(($i-1))
     for j in  `seq 1 $nloops`; do
         echo number of processors: $i, run number: $j , taskset 0-$npm1 
-        mpiexec -n $i taskset -c 0-$npm1 ./secondDerivative  | grep finish >>  Mpi_sm_Result.txt
+        mpiexec -n $i taskset -c 0-$npm1 ./secondDerivative $2 | grep finish >>  Mpi_sm_Result.txt
     done
 done
 
