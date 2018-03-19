@@ -7,11 +7,10 @@ fi
 
 nloops=3
 
-
 npt=`grep -c ^processor /proc/cpuinfo`
 slots=`numactl -H | grep available | awk '{}{print $2}{}'`
-np="$(($npt / $slots))"
-npps="$(($np / 2))"
+np="$(($npt / 1))"
+npps="$(($np / $slots))"
 npm1="$(($np - 1))"
 
 sequence=''
@@ -58,7 +57,7 @@ fi
 echo $sequence
 
 rm -f OpenMp_Result.txt
-for i in  `seq 1 $np`; do
+for i in 1 `seq 2 2 $np`; do
     export OMP_NUM_THREADS=$i
     for j in  `seq 1 $nloops`; do
         echo number of threads: $i
@@ -67,7 +66,13 @@ for i in  `seq 1 $np`; do
 done
 
 mkdir -p ../../plots/$(hostname)/$1
-cat OpenMp_Result.txt | awk '{}{print $2, $6+$11+$16, $6, $11, $16}{}'   | sort  -k1,1n -k2,2n   | awk 'BEGIN{ prev=-1} { if ($1 != prev) { print $0; prev=$1}  } END{}'  > ../../plots/$(hostname)/$1/OpenMP.txt
 
-rm OpenMp_Result.txt
+cat OpenMp_Result.txt | awk '{}{print $2, $6, $11, $16}{}'  | sort  -k1,1n -k2,2n   | awk 'BEGIN{ prev=-1} { if ($1 != prev) { print $0; prev=$1}  } END{}' | awk '{}{print $1, $2}{}' > minX
 
+cat OpenMp_Result.txt | awk '{}{print $2, $6, $11, $16}{}'  | sort  -k1,1n -k3,3n   | awk 'BEGIN{ prev=-1} { if ($1 != prev) { print $0; prev=$1}  } END{}' | awk '{}{ print $3} {}' > minY
+
+cat OpenMp_Result.txt | awk '{}{print $2, $6, $11, $16}{}'  | sort  -k1,1n -k4,4n   | awk 'BEGIN{ prev=-1} { if ($1 != prev) { print $0; prev=$1}  } END{}' | awk '{}{ print $4} {}' > minZ
+
+paste minX minY minZ >  ../../plots/$(hostname)/$1/OpenMP.txt
+
+rm OpenMp_Result.txt minX minY minZ 
