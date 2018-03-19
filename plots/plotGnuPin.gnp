@@ -8,15 +8,15 @@ machine=ARG1
 #print 'hello world'     # to actually print
 
 if (ARG2 == 1) {
-    var=3;
+    var=2;
     direction='X'
 } 
 if (ARG2 == 2) {
-    var=4; 
+    var=3; 
     direction='Y'
 } 
 if (ARG2 == 3) {
-    var=5; 
+    var=4; 
     direction='Z'
 }    
 
