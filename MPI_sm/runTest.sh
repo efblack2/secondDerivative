@@ -8,9 +8,9 @@ fi
 nloops=3
 
 npt=`grep -c ^processor /proc/cpuinfo`
-slots=`numactl -H | grep available | awk '{}{print $2}{}'`
+sockets=`lscpu | grep Socket | awk '{}{print $2}{}'`
 np="$(($npt / 1))"
-npps="$(($np / $slots))"
+npps="$(($np / $sockets))"
 npm1="$(($np - 1))"
 
 sequence=''

@@ -8,9 +8,9 @@ fi
 nloops=3
 
 npt=`grep -c ^processor /proc/cpuinfo`
-slots=`numactl -H | grep available | awk '{}{print $2}{}'`
+sockets=`lscpu | grep Socket | awk '{}{print $2}{}'`
 np="$(($npt / 1))"
-npps="$(($np / $slots))"
+npps="$(($np / $sockets))"
 npm1="$(($np - 1))"
 
 sequence=''
@@ -38,7 +38,7 @@ if [ -n "$LM_LICENSE_FILE" ]; then
     export MP_BIND="yes"
     export MP_BLIST=$sequence
     #export MP_BLIST="0-$npm1"
-    echo $MP_BLIST
+    #echo $MP_BLIST
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
     export OMP_PLACES=sockets
@@ -55,6 +55,7 @@ else
 fi
 
 echo $sequence
+
 
 rm -f OpenMp_Result.txt
 for i in 1 `seq 2 2 $np`; do
