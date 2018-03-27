@@ -8,49 +8,32 @@ fi
 nloops=3
 
 npt=`grep -c ^processor /proc/cpuinfo`
-sockets=`lscpu | grep Socket | awk '{}{print $2}{}'`
-tpc=`lscpu | grep -i thread | awk '{}{print $4}{}'`
+numaNodes=`lscpu | grep "NUMA node(s):" | awk '{}{print $3}{}'`
+tpc=`lscpu | grep "Thread(s) per core:" | awk '{}{print $4}{}'`
 np="$(($npt / $tpc))"
-npps="$(($np / $sockets))"
+npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
-sequence=''
-##########################################
-for i in  `seq 0 $((npps-1))`; do
-    sequence+=$i','
-    sequence+=$(($i +  $((np/2))  ))','
-done
-##########################################
-#for i in `seq 0 $((npm1))`; do
-#    sequence+=$i','
-#done
-##########################################
-#for i in `seq 0 2 $((npm1))`; do
-#    sequence+=$i','
-#done
-#for i in `seq 1 2 $((npm1))`; do
-#    sequence+=$i','
-#done
-##########################################
-
-sequence=${sequence%?}
-
-echo $sequence
-if [ -n "$LM_LICENSE_FILE" ]; then
+if [ -n "$PGI" ]; then
     echo "Pgi Compiler"
+    bindings=" --bind-to core  --report-bindings"
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
     echo "Intel Compiler"
+    #np=15
+    #npps="$(($np / $numaNodes))"
+    #npm1="$(($np - 1))"
+    bindings="-genv I_MPI_PIN_DOMAIN=core -genv I_MPI_PIN_ORDER=scatter -genv I_MPI_DEBUG=4"
 else
     echo "Gnu Compiler"
+    bindings=" --bind-to core --report-bindings"
 fi
-
 
 rm -f Mpi_sm_Result.txt
 for i in 1 `seq 2 2 $np`; do
 
     for j in  `seq 1 $nloops`; do
-        echo number of processors: $i
-        mpiexec -n $i ./secondDerivative $2 | grep finish >>  Mpi_sm_Result.txt
+        echo number of processors: $i, run number: $j
+        mpiexec $bindings -n $i ./secondDerivative $2 | grep finish >>  Mpi_sm_Result.txt
     done
 done
 
