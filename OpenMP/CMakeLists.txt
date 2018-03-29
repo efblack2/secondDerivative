@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 ## set appropriately the following line to create a Double Precision version
 set(DOUBLE_PRECISION ON)
 
-project(secondDerivative)
+project(secondDerivative C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Release)
@@ -22,7 +22,7 @@ endif ( )
 ## end of the following lines mainly contain flags I have not found in CMake
 
 if (DOUBLE_PRECISION)
-    set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -DDOUBLE")    
+    set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -DDOUBLE")
 endif()
 
 
@@ -42,5 +42,4 @@ target_link_libraries(secondDerivative ${CMAKE_EXE_LINKER_FLAGS})
 #MESSAGE( STATUS "CMAKE_C_FLAGS: "               ${CMAKE_C_FLAGS} )
 #MESSAGE( STATUS "CMAKE_CURRENT_SOURCE_DIR: "    ${CMAKE_CURRENT_SOURCE_DIR} )
 ########### end of Debug messages #################
-
 
