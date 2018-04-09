@@ -30,6 +30,7 @@ np="$(($npt / $tpc))"
 npps="$(($np / $numaNodes))"
 npm1="$(($np - 1))"
 
+
 if [ -n "$PGI" ]; then
     echo "Pgi Compiler"
 elif [ -n "$INTEL_LICENSE_FILE" ]; then
@@ -42,8 +43,8 @@ else
 fi
 
 rm -f Mpi_sm_Result.txt
-for i in 1 `seq 2 2 $np`; do
 
+for i in 1 `seq 2 2 $np`; do
     for j in  `seq 1 $nloops`; do
         echo number of processors: $i, run number: $j
         mpiexec $bindings -n $i ./secondDerivative $2 | grep finish >>  Mpi_sm_Result.txt
