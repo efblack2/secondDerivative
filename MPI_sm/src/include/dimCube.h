@@ -21,7 +21,7 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
     if (myRank == 0) ++localLevel;
     if (myRank == commSize-1 ) ++localLevel;
     
-
+    
     //const int size = level * row * col;
     real ***cube;
 
@@ -57,7 +57,6 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
     //MPI_Barrier(*sm_comm);  // is this really needed? //
 
     MPI_Win_lock_all(0,*sm_win);
-
     for (int l=0; l<localLevel; ++l){
         for (int r=0; r<row; ++r){
             for (int c=0; c<col; ++c){
@@ -69,17 +68,18 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
     MPI_Win_sync(*sm_win);
     MPI_Barrier(*sm_comm);
     MPI_Win_unlock_all(*sm_win);
-    //MPI_Barrier(*sm_comm);  // is this really needed? //
 
 
 /*
     MPI_Win_lock_all(0,*sm_win);
-
+    real *temp = &cube[0][0][0];
+    int k=0;
     if (myRank==0) {
         for (int l=0; l<level; ++l){
             for (int r=0; r<row; ++r){
                 for (int c=0; c<col; ++c){
-                    cube[l][r][c] = 0.0;
+                    //cube[l][r][c] = 0.0;
+                    temp[k++] = (real) 0.0;
                 } // end for //
             } // end for //
         } // end for //
@@ -88,8 +88,8 @@ real*** dimCube(int level, int row, int col, MPI_Win *sm_win, MPI_Comm *sm_comm)
     MPI_Win_sync(*sm_win);
     MPI_Barrier(*sm_comm);
     MPI_Win_unlock_all(*sm_win);
-    MPI_Barrier(*sm_comm);  // is this really needed? //
 */
+
 
    return cube;
 

@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     struct timeval tp;
 
-    double elapsed_time_x, elapsed_time_y, elapsed_time_z;
+    double elapsed_time_x; //, elapsed_time_y, elapsed_time_z;
     int max_iterations=5;                                  // number of iterations
 
     if (argc > 1 ) {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_x, 1, MPI_DOUBLE, MPI_MAX,sm_comm);
 
     //////////////////////////// x //////////////////////////
-
+/*
     //////////////////////////// y //////////////////////////
     MPI_Barrier(sm_comm);
     //elapsed_time_y = -MPI_Wtime();
@@ -121,13 +121,14 @@ int main(int argc, char *argv[])
     elapsed_time_z += (tp.tv_sec*1.0e6 + tp.tv_usec);
     MPI_Allreduce( MPI_IN_PLACE, &elapsed_time_z, 1, MPI_DOUBLE, MPI_MAX,sm_comm);
     //////////////////////////// z //////////////////////////
-
+*/
 
     MPI_Win_unlock_all(sm_win_t2);
 
     if (mySharedRank == root) {
         printf ("for %d processors it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n",
-        sharedSize,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_y*1.0e-6/max_iterations,elapsed_time_z*1.0e-6/max_iterations );
+        //sharedSize,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_y*1.0e-6/max_iterations,elapsed_time_z*1.0e-6/max_iterations );
+        sharedSize,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_x*1.0e-6/max_iterations );
         if (sizeof(real) == 8) {
             printf("Double precision version\n");
         } else {
