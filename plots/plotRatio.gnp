@@ -18,7 +18,8 @@ if (ARG2 == 3) {
     direction='Z';
 }    
 
-plotTitle=machine." in the ".direction." direction" 
+#plotTitle=machine." in the ".direction." direction" 
+plotTitle=machine." 
 
 set terminal pdf enhanced
 set output machine.direction."Ratio.pdf"
@@ -38,6 +39,7 @@ set grid
 set xlabel "Number of Processors/Threads"
 set ylabel "OpenMP/MPI Ratio"
 
+set format y "%.2f"
 set title plotTitle
 #set label "" at screen 0.5, 0.9 center font "Arial,11"
 set label "OpenMP to MPI\_{sm} Ratio" at graph 0.5, 1.035 center font "Arial,11"
