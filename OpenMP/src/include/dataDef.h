@@ -1,8 +1,8 @@
 #ifndef DATA
     #define DATA
-    #define ROWS       4094
-    #define COLUMNS    1022
-    #define LEVELS     126
+    #define ROWS       8190
+    #define COLUMNS    510
+    #define LEVELS     62
 
     #define ROW2       (ROWS+2)
     #define COL2       (COLUMNS+2)

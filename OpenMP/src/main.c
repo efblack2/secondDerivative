@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
     int nthreads=0;
-    double elapsed_time_x, elapsed_time_y, elapsed_time_z;
+    double elapsed_time_x; //, elapsed_time_y, elapsed_time_z;
     struct timeval tp;
 
     int max_iterations=5;                               // number of iterations
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     gettimeofday(&tp,NULL);
     elapsed_time_x += (tp.tv_sec*1.0e6 + tp.tv_usec);
     ///////////////////// x ///////////////////////
-
+/*
     ///////////////////// y ///////////////////////
     gettimeofday(&tp,NULL);
     elapsed_time_y = -(tp.tv_sec*1.0e6 + tp.tv_usec);
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     gettimeofday(&tp,NULL);
     elapsed_time_z += (tp.tv_sec*1.0e6 + tp.tv_usec);
     ///////////////////// z ///////////////////////
-
+*/
     #pragma omp parallel
     {
         #pragma omp master
@@ -87,7 +87,8 @@ int main(int argc, char *argv[])
 
 
     printf ("for %d threads it tooks %14.6e seconds to finish x, %14.6e seconds to finish y, %14.6e seconds to finish z\n",
-    nthreads,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_y*1.0e-6/max_iterations,elapsed_time_z*1.0e-6/max_iterations );
+    //nthreads,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_y*1.0e-6/max_iterations,elapsed_time_z*1.0e-6/max_iterations );
+    nthreads,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_x*1.0e-6/max_iterations,elapsed_time_x*1.0e-6/max_iterations );
 
     freeCube(&t2);
     freeCube(&t1);

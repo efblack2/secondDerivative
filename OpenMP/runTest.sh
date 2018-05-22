@@ -83,4 +83,4 @@ cat OpenMp_Result.txt | awk '{}{print $2, $6, $11, $16}{}'  | sort  -k1,1n -k4,4
 
 paste minX minY minZ >  ../../plots/$(hostname)/$1/OpenMP.txt
 
-rm OpenMp_Result.txt minX minY minZ 
+rm OpenMp_Result.txt minX minY minZ
