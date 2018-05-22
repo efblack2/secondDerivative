@@ -21,19 +21,21 @@ cd ../..
 
 
 gnuplot -c plot.gnp $1 1
-gnuplot -c plot.gnp $1 2
-gnuplot -c plot.gnp $1 3
+#gnuplot -c plot.gnp $1 2
+#gnuplot -c plot.gnp $1 3
 
 gnuplot -c plotRatio.gnp $1 1
-gnuplot -c plotRatio.gnp $1 2
-gnuplot -c plotRatio.gnp $1 3
+#gnuplot -c plotRatio.gnp $1 2
+#gnuplot -c plotRatio.gnp $1 3
 
 
 
-pdfunite $1X.pdf  $1XRatio.pdf   $1Y.pdf $1YRatio.pdf  $1Z.pdf $1ZRatio.pdf  $1.pdf
+#pdfunite $1X.pdf  $1XRatio.pdf   $1Y.pdf $1YRatio.pdf  $1Z.pdf $1ZRatio.pdf  $1.pdf
 
 
-rm $1X.pdf $1Y.pdf $1Z.pdf $1XRatio.pdf $1YRatio.pdf $1ZRatio.pdf
+#rm -rf $1X.pdf $1Y.pdf $1Z.pdf $1XRatio.pdf $1YRatio.pdf $1ZRatio.pdf
+mv $1X.pdf $1.pdf
+mv $1XRatio.pdf $1Ratio.pdf
 
 
 #gnuplot -c plotPin.gnp $1 1
